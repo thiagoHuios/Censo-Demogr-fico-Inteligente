@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="IbgeDataInsights.MainPage"
+             Title="IBGE Data Insights"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#F5F7FA">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
+
+        <!-- Cabeçalho -->
+        <VerticalStackLayout Grid.Row="0" Spacing="4">
+            <Label Text="IBGE Data Insights"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   TextColor="#1A365D" />
+            <Label Text="Nomes e sobrenomes mais frequentes (Censo 2022)"
+                   FontSize="13"
+                   TextColor="#4A5568" />
+        </VerticalStackLayout>
+
+        <!-- Seletores Encadeados -->
+        <Border Grid.Row="1"
+                BackgroundColor="White"
+                Stroke="#E2E8F0"
+                StrokeShape="RoundRectangle 12"
+                Padding="12">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="1. Selecione o Estado"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="#2D3748" />
+                <Picker x:Name="EstadoPicker"
+                        Title="Escolha um estado..."
+                        ItemDisplayBinding="{Binding NomeFormatado}"
+                        SelectedIndexChanged="OnEstadoSelected" />
+
+                <Label Text="2. Selecione o Município (opcional)"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="#2D3748" />
+                <Picker x:Name="MunicipioPicker"
+                        Title="Todos os municípios do estado"
+                        ItemDisplayBinding="{Binding Nome}"
+                        IsEnabled="False"
+                        SelectedIndexChanged="OnMunicipioSelected" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Abas de Categoria -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*,*" ColumnSpacing="8">
+            <Button x:Name="BtnHomens"
+                    Grid.Column="0"
+                    Text="Homens"
+                    BackgroundColor="#1A365D"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Clicked="OnCategoriaClicked" />
+            <Button x:Name="BtnMulheres"
+                    Grid.Column="1"
+                    Text="Mulheres"
+                    BackgroundColor="#CBD5E0"
+                    TextColor="#1A202C"
+                    CornerRadius="8"
+                    Clicked="OnCategoriaClicked" />
+            <Button x:Name="BtnSobrenomes"
+                    Grid.Column="2"
+                    Text="Sobrenomes"
+                    BackgroundColor="#CBD5E0"
+                    TextColor="#1A202C"
+                    CornerRadius="8"
+                    Clicked="OnCategoriaClicked" />
+        </Grid>
+
+        <!-- Loading + Listagem -->
+        <Grid Grid.Row="3">
+            <CollectionView x:Name="NomesCollectionView"
+                            EmptyView="Selecione um estado ou município para consultar.">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,4"
+                                Padding="14,10"
+                                BackgroundColor="White"
+                                Stroke="#E2E8F0"
+                                StrokeShape="RoundRectangle 10">
+                            <Grid ColumnDefinitions="50,*,Auto" VerticalOptions="Center">
+                                <Label Grid.Column="0"
+                                       Text="{Binding RankingFormatado}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#2B6CB0"
+                                       VerticalOptions="Center" />
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding NomeFormatado}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#1A202C"
+                                       VerticalOptions="Center" />
+
+                                <Label Grid.Column="2"
+                                       Text="{Binding FrequenciaFormatada}"
+                                       FontSize="13"
+                                       TextColor="#718096"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <ActivityIndicator x:Name="LoadingIndicator"
+                               IsRunning="False"
+                               IsVisible="False"
+                               Color="#1A365D"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+        </Grid>
+    </Grid>
+</ContentPage>
